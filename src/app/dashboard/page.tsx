@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 
 export default function Dashboard() {
-  const [nftDataList, setNftDataList] = useState<any[]>([]); // Lista para varios NFTs
+  const [nftDataList, setNftDataList] = useState<string[]>([]); // Lista para varios NFTs
   const [imageUrls, setImageUrls] = useState<string[]>([]); // Lista para URLs de las imágenes
 
   // Hook para leer el contrato de la posición 0

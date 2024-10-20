@@ -25,7 +25,7 @@ export default function Login() {
       console.log({ responseLogin });
 
       const state = await responseLogin.user.state;
-      localStorage.setItem("email", email);
+      localStorage.setItem("email", `${email}`);
 
       if (state === "PENDING") {
         router.push("/verify");
@@ -48,10 +48,10 @@ export default function Login() {
               <label>Contraseña: </label>
               <input type="password" name="password" />
             </div>
-            <div className={styles.email_form_row}>
+            {/* <div className={styles.email_form_row}>
               <label>DNI: </label>
               <input type="text" name="dni" />
-            </div>
+            </div> */}
             <button className={styles.email_form_button} type="submit">
               Iniciar Sesión
             </button>
@@ -60,7 +60,7 @@ export default function Login() {
       )}
       <div
         className={styles.checkbox}
-        onClick={() => setIsSelected(!isSelected)}
+        onClick={() => { setIsSelected(!isSelected) }}
       >
         <input
           className={styles.checkbox_checker}

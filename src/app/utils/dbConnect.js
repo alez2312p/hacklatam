@@ -1,11 +1,11 @@
-import mongoose, { Mongoose } from "mongoose";
+import mongoose from "mongoose";
 
 global.mongoose = {
   conn: null,
   promise: null,
 };
 
-export async function dbConnect(): Promise<Mongoose> {
+export async function dbConnect() {
   if (global.mongoose && global.mongoose.conn) {
     console.log("connected from previous");
 
