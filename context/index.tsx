@@ -1,47 +1,37 @@
-'use client'
+"use client";
 
-import { wagmiAdapter, projectId } from '../config'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { createAppKit } from '@reown/appkit/react'
-import { mainnet, arbitrum, avalanche, base, optimism, polygon } from '@reown/appkit/networks'
-import React, { type ReactNode } from 'react'
-import { cookieToInitialState, WagmiProvider, type Config } from 'wagmi'
+import React, { ReactNode } from "react";
+import { config, projectId } from "../config";
 
-// Set up queryClient
-const queryClient = new QueryClient()
+import { createWeb3Modal } from "@web3modal/wagmi/react";
 
-if (!projectId) {
-    throw new Error('Project ID is not defined')
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+import { State, WagmiProvider } from "wagmi";
+
+// Setup queryClient
+const queryClient = new QueryClient();
+
+if (!projectId) throw new Error("Project ID is not defined");
+
+// Create modal
+createWeb3Modal({
+  wagmiConfig: config,
+  projectId,
+  enableAnalytics: true, // Optional - defaults to your Cloud configuration
+  enableOnramp: true, // Optional - false as default
+});
+
+export default function Web3ModalProvider({
+  children,
+  initialState,
+}: {
+  children: ReactNode;
+  initialState?: State;
+}) {
+  return (
+    <WagmiProvider config={config} initialState={initialState}>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </WagmiProvider>
+  );
 }
-
-// Set up metadata
-const metadata = {
-    name: 'tppd',
-    description: 'AppKit Example',
-    url: 'https://reown.com/appkit', // origin must match your domain & subdomain
-    icons: ['https://assets.reown.com/reown-profile-pic.png']
-}
-
-// Create the modal
-createAppKit({
-    adapters: [wagmiAdapter],
-    projectId,
-    networks: [mainnet, arbitrum, avalanche, base, optimism, polygon],
-    defaultNetwork: mainnet,
-    metadata: metadata,
-    features: {
-        analytics: true, // Optional - defaults to your Cloud configuration
-    }
-})
-
-function ContextProvider({ children, cookies }: { children: ReactNode; cookies: string | null }) {
-    const initialState = cookieToInitialState(wagmiAdapter.wagmiConfig as Config, cookies)
-
-    return (
-        <WagmiProvider config={wagmiAdapter.wagmiConfig as Config} initialState={initialState}>
-            <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-        </WagmiProvider>
-    )
-}
-
-export default ContextProvider

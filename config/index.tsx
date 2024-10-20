@@ -1,24 +1,28 @@
-import { cookieStorage, createStorage } from '@wagmi/core'
-import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
-import { mainnet, arbitrum, sepolia } from '@reown/appkit/networks'
-import { tppd } from "../chain/tppd"
-// Get projectId from https://cloud.reown.com
-export const projectId = '1eb32efff91fdfbb5a409faea6ed3878'
+import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 
-if (!projectId) {
-    throw new Error('Project ID is not defined')
-}
+import { cookieStorage, createStorage } from "wagmi";
+import { mainnet, sepolia } from "wagmi/chains";
+import { chain } from "../chain/chain";
 
-export const networks = [mainnet, arbitrum, tppd, sepolia]
+// Your Reown Cloud project ID
+export const projectId = String(process.env.PROJECT_ID);
 
-//Set up the Wagmi Adapter (Config)
-export const wagmiAdapter = new WagmiAdapter({
-    storage: createStorage({
-        storage: cookieStorage
-    }),
-    ssr: true,
-    projectId,
-    networks
-})
+// Create a metadata object
+const metadata = {
+  name: "icp-hackathon-2024",
+  description: "AppKit Example",
+  url: "https://reown.com/appkit", // origin must match your domain & subdomain
+  icons: ["https://assets.reown.com/reown-profile-pic.png"],
+};
 
-export const config = wagmiAdapter.wagmiConfig
+// Create wagmiConfig
+const chains = [mainnet, sepolia, chain] as const;
+export const config = defaultWagmiConfig({
+  chains,
+  projectId,
+  metadata,
+  ssr: true,
+  storage: createStorage({
+    storage: cookieStorage,
+  }),
+});

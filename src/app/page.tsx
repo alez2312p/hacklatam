@@ -1,43 +1,18 @@
-"use client"
-import styles from "./page.module.css";
-// import { useAccount } from "wagmi";
-import { useAppKitAccount } from "@reown/appkit/react";
-import { useWriteContract } from 'wagmi'
-import contract from "../../contract.json"
-import Login from "./login/page";
+import Login from "./utils/login";
+
 export default function Home() {
-
-  const { writeContract } = useWriteContract()
-
-
-  // const { address, isConnecting } = useAccount();
-  // if (address) {
-
-  // }
-  const { address, isConnected, status } = useAppKitAccount()
-  console.log({ address, isConnected, status });
-
-  const imageURL = "ipfs://QmSYVgdMWHK3gfMX5R7CUaeYecM8QsKnU4H4he3AWo7uYP"
-
-  const handlerNFT = () => {
-    writeContract({
-      abi: contract.ABI,
-      address: contract.ADDRESS as `0x${string}`,
-      functionName: 'safeMint',
-      args: [
-        address,
-        imageURL,
-      ],
-    })
-  }
-
-
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Login />
+    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+        <div className="flex flex-row items-center justify-items-center text-lg	">
 
+          <span>Transparent Process Protocol</span>
+        </div>
+        <div className="flex gap-4 items-center flex-col sm:flex-row">
+          <Login />
+        </div>
       </main>
+
     </div>
   );
 }
